@@ -1,0 +1,25 @@
+server {
+   listen 80;
+   server_name api.uam.test;
+   root /home/zaffron/projects/uamhr/api/public;
+
+   index index.php;
+
+   location / {
+       try_files $uri $uri/ /index.php?$query_string;
+   }
+
+   location /index.php {	
+       try_files $uri $uri/ /index.php?$query_string;
+   }
+
+   location ~ ^/index.php$ {
+       include /etc/nginx/fastcgi_params;
+       fastcgi_pass unix:/var/run/php/php7.1-fpm.sock;
+       fastcgi_read_timeout 900;
+       fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+       fastcgi_param HTTPS off;
+   }
+}
+
+
